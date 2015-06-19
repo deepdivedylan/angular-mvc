@@ -9,7 +9,7 @@ require_once(dirname(__DIR__) . "/lib/date-utils.php");
  *
  * @author Dylan McDonald <dmcdonald21@cnm.edu>
  **/
-class Tweet {
+class Tweet implements JsonSerializable {
 	/**
 	 * id for this Tweet; this is the primary key
 	 * @var int $tweetId
@@ -389,6 +389,18 @@ class Tweet {
 		} else {
 			return ($tweets);
 		}
+	}
+
+	/**
+	 * determines which variables to include in json_encode()
+	 *
+	 * @see http://php.net/manual/en/class.jsonserializable.php JsonSerializable interface
+	 * @return array all object variables, including private variables
+	 **/
+	public function JsonSerialize() {
+		$fields = get_object_vars($this);
+		$fields["tweetDate"] = $this->tweetDate->getTimestamp() * 1000;
+		return($fields);
 	}
 }
 ?>

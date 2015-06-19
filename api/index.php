@@ -3,31 +3,20 @@ require_once(dirname(__DIR__) . "/classes/autoload.php");
 require_once("/etc/apache2/data-design/encrypted-config.php");
 
 // prepare an empty reply
+$format = "json";
 $reply = new stdClass();
-$reply->status = 0;
+$reply->status = 200;
 $reply->data = null;
 
 try {
 	// determine which HTTP method was used
 	$method = array_key_exists("HTTP_X_HTTP_METHOD", $_SERVER) ? $_SERVER["HTTP_X_HTTP_METHOD"] : $_SERVER["REQUEST_METHOD"];
-	switch($method) {
-		case "DELETE":
-		case "POST":
-			$inputMethod = INPUT_POST;
-			break;
-		case "GET":
-		case "PUT":
-			$inputMethod = INPUT_GET;
-			break;
-		default:
-			throw(new RuntimeException("invalid HTTP method", 405));
-	}
 
 	// sanitize the class, id, and format
 	$validFormats = array("html", "json", "xml");
-	$id = filter_input($inputMethod, "id", FILTER_VALIDATE_INT);
-	$class = filter_input($inputMethod, "class", FILTER_SANITIZE_STRING);
-	$format = filter_input($inputMethod, "format", FILTER_SANITIZE_STRING);
+	$id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
+	$class = filter_input(INPUT_GET, "class", FILTER_SANITIZE_STRING);
+	$format = filter_input(INPUT_GET, "format", FILTER_SANITIZE_STRING);
 	if(empty($class) === true) {
 		throw(new InvalidArgumentException("invalid class", 405));
 	}
@@ -41,17 +30,44 @@ try {
 	// grab the mySQL connection
 	$pdo = connectToEncryptedMySql("/etc/apache2/data-design/dmcdonald21.ini");
 
+	// handle all RESTful calls to Tweet
 	if($class === "tweet") {
+		// get some or all Tweets
 		if($method === "GET") {
 			if(empty($id) === false) {
-				$tweet = Tweet::getTweetByTweetId($pdo, $id);
+				$reply->data = Tweet::getTweetByTweetId($pdo, $id);
+			} else {
+				$reply->data = Tweet::getAllTweets($pdo)->toArray();
 			}
+		// post to an existing Tweet
+		} else if($method === "POST") {
+			$tweet = Tweet::getTweetByTweetId($pdo, $id);
+			if(empty($_POST["profileId"]) === true || empty($_POST["tweetContent"]) === true || empty($_POST["tweetDate"]) === true) {
+				throw(new InvalidArgumentException("tweet fields incomplete or missing"));
+			}
+			$tweet->setProfileId($_POST["profileId"]);
+			$tweet->setTweetContent($_POST["tweetContent"]);
+			$tweet->setTweetDate($_POST["tweetDate"]);
+			$tweet->update($pdo);
+			$reply->data = "Tweet updated OK";
+		// delete an existing Tweet
+		} else if($method === "DELETE") {
+			$tweet = Tweet::getTweetByTweetId($pdo, $id);
+			$tweet->delete($pdo);
+			$reply->data = "Tweet deleted OK";
 		}
 	}
-
-
+// create an exception to pass back to the RESTful caller
 } catch(Exception $exception) {
 	$reply->status = $exception->getCode();
 	$reply->data = $exception->getMessage();
-	var_dump($reply);
+}
+
+if($format === "json") {
+	header("Content-type: application/json");
+	echo json_encode($reply);
+} else if($format === "html") {
+	echo "HTML format selected";
+} else if($format === "xml") {
+	echo "XML format selected";
 }
