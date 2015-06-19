@@ -2,11 +2,41 @@
 require_once(dirname(__DIR__) . "/classes/autoload.php");
 require_once("/etc/apache2/data-design/encrypted-config.php");
 
+// start the session and create a XSRF token
+if(session_status() !== PHP_SESSION_ACTIVE) {
+	session_start();
+}
+
+// if the token does not exist, create one and send it in a cookie
+if(empty($_SESSION["XSRF-TOKEN"]) === true) {
+	$_SESSION["XSRF-TOKEN"] = hash("sha512", session_id() . openssl_random_pseudo_bytes(16));
+	setcookie("XSRF-TOKEN", $_SESSION["XSRF-TOKEN"]);
+}
+
 // prepare an empty reply
 $format = "json";
 $reply = new stdClass();
 $reply->status = 200;
 $reply->data = null;
+
+/**
+ * verifies the X-XSRF-TOKEN sent by Angular matches the XSRF-TOKEN saved in this session.
+ * This function returns nothing, but will throw an exception when something does not match
+ *
+ * @see https://code.angularjs.org/1.3.16/docs/api/ng/service/$http Angular $http service
+ * @throws InvalidArgumentException when tokens do not match
+ **/
+function verifyXsrf() {
+	$headers = apache_request_headers();
+	if(array_key_exists("X-XSRF-TOKEN", $headers) === false) {
+		throw(new InvalidArgumentException("invalid XSRF token", 401));
+	}
+	$angularHeader = $headers["X-XSRF-TOKEN"];
+	$correctHeader = $_SESSION["XSRF-TOKEN"];
+	if($angularHeader !== $correctHeader) {
+		throw(new InvalidArgumentException("invalid XSRF token", 401));
+	}
+}
 
 try {
 	// determine which HTTP method was used
@@ -41,6 +71,7 @@ try {
 			}
 		// post to an existing Tweet
 		} else if($method === "POST") {
+			verifyXsrf();
 			$tweet = Tweet::getTweetByTweetId($pdo, $id);
 			if(empty($_POST["profileId"]) === true || empty($_POST["tweetContent"]) === true || empty($_POST["tweetDate"]) === true) {
 				throw(new InvalidArgumentException("tweet fields incomplete or missing"));
@@ -52,6 +83,7 @@ try {
 			$reply->data = "Tweet updated OK";
 		// delete an existing Tweet
 		} else if($method === "DELETE") {
+			verifyXsrf();
 			$tweet = Tweet::getTweetByTweetId($pdo, $id);
 			$tweet->delete($pdo);
 			$reply->data = "Tweet deleted OK";
