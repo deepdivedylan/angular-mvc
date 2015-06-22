@@ -4,26 +4,22 @@ app.controller("IndexController", ["$scope", "TweetModel", function($scope, twee
 	$scope.tweets = [];
 
 	$scope.getTweets = function() {
-		TweetModel.all()
+		tweetModel.all()
 			.then(function(result) {
-				$scope.$apply(function () {
-					$scope.tweets = result.data;
-				});
+				$scope.tweets = result.data.data;
 			});
 	};
 
 	$scope.createTweet = function(tweet) {
-		TweetModel.create(tweetModel)
+		tweetModel.create(tweetModel)
 			.then(function(result) {});
 	};
 
 	$scope.updateTweet = function(tweet) {
-		TweetModel.update(tweet.tweetId, tweet)
+		tweetModel.update(tweet.tweetId, tweet)
 			.then(function (result) {
-				$scope.$apply(function() {
-					$scope.cancelEditing();
-					$scope.getTweets();
-				});
+				$scope.cancelEditing();
+				$scope.getTweets();
 			});
 	};
 
@@ -38,12 +34,12 @@ app.controller("IndexController", ["$scope", "TweetModel", function($scope, twee
 	};
 
 	$scope.deleteTweet = function(tweetId) {
-		TweetModel.destroy(tweetId)
+		tweetModel.destroy(tweetId)
 			.then(function(result) {
-				$scope.$apply(function() {
-					$scope.cancelEditing();
-					$scope.getTweets();
-				});
+				$scope.cancelEditing();
+				$scope.getTweets();
 			});
-	}
+	};
+
+	$scope.getTweets();
 }]);
