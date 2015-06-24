@@ -10,8 +10,8 @@ if(session_status() !== PHP_SESSION_ACTIVE) {
 // if the token does not exist, create one and send it in a cookie
 if(empty($_SESSION["XSRF-TOKEN"]) === true) {
 	$_SESSION["XSRF-TOKEN"] = hash("sha512", session_id() . openssl_random_pseudo_bytes(16));
-	setcookie("XSRF-TOKEN", $_SESSION["XSRF-TOKEN"]);
 }
+setcookie("XSRF-TOKEN", $_SESSION["XSRF-TOKEN"], 0, dirname(dirname($_SERVER["SCRIPT_NAME"])));
 
 // prepare an empty reply
 $format = "json";
@@ -53,7 +53,7 @@ try {
 	if(in_array($format, $validFormats) === false) {
 		throw(new InvalidArgumentException("invalid format", 405));
 	}
-	if(($method === "DELETE" || $method === "POST") && (empty($id) === true || $id < 0)) {
+	if($method === "DELETE" && (empty($id) === true || $id < 0)) {
 		throw(new InvalidArgumentException("id cannot be empty or negative", 405));
 	}
 
@@ -71,16 +71,26 @@ try {
 			}
 		// post to an existing Tweet
 		} else if($method === "POST") {
+			// convert POSTed JSON to an object
 			verifyXsrf();
-			$tweet = Tweet::getTweetByTweetId($pdo, $id);
-			if(empty($_POST["profileId"]) === true || empty($_POST["tweetContent"]) === true || empty($_POST["tweetDate"]) === true) {
-				throw(new InvalidArgumentException("tweet fields incomplete or missing"));
+			$requestContent = file_get_contents("php://input");
+			$requestObject = json_decode($requestContent);
+
+			if(empty($id) === true || $id < 0) {
+				$tweet = new Tweet(null, 1, "empty tweet");
+			} else {
+				$tweet = Tweet::getTweetByTweetId($pdo, $id);
 			}
-			$tweet->setProfileId($_POST["profileId"]);
-			$tweet->setTweetContent($_POST["tweetContent"]);
-			$tweet->setTweetDate($_POST["tweetDate"]);
-			$tweet->update($pdo);
-			$reply->data = "Tweet updated OK";
+			$tweet->setProfileId($requestObject->profileId);
+			$tweet->setTweetContent($requestObject->tweetContent);
+			$tweet->setTweetDate($requestObject->tweetDate);
+			if(empty($id) === true || $id < 0) {
+				$tweet->insert($pdo);
+				$reply->data = "Tweet created OK";
+			} else {
+				$tweet->update($pdo);
+				$reply->data = "Tweet updated OK";
+			}
 		// delete an existing Tweet
 		} else if($method === "DELETE") {
 			verifyXsrf();
