@@ -1,5 +1,6 @@
-app.controller("IndexController", ["$scope", "TweetModel", function($scope, tweetModel) {
+app.controller("IndexController", ["$scope", "$filter", "TweetModel", function($scope, $filter, tweetModel) {
 	$scope.editedTweet = null;
+	$scope.newTweet = null;
 	$scope.isEditing = false;
 	$scope.tweets = [];
 
@@ -11,8 +12,12 @@ app.controller("IndexController", ["$scope", "TweetModel", function($scope, twee
 	};
 
 	$scope.createTweet = function(tweet) {
-		tweetModel.create(tweetModel)
-			.then(function(result) {});
+		var mySqlDate = $filter("date")(tweet.tweetDate, "yyyy-MM-dd HH:mm:ss");
+		tweet.tweetDate = mySqlDate;
+		tweetModel.create(tweet)
+			.then(function(result) {
+				console.log(result.data);
+			});
 	};
 
 	$scope.updateTweet = function(tweet) {
@@ -41,5 +46,10 @@ app.controller("IndexController", ["$scope", "TweetModel", function($scope, twee
 			});
 	};
 
+	$scope.initCreateForm = function() {
+		$scope.newTweet = { profileId: "", tweetContent: "", tweetDate: new Date()};
+	};
+
 	$scope.getTweets();
+	$scope.initCreateForm();
 }]);
