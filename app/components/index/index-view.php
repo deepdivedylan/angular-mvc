@@ -11,8 +11,8 @@
 					<td>{{ tweet.tweetContent }}</td>
 					<td>{{ tweet.tweetDate | date: "medium" }}</td>
 					<td>
-						<button class="btn btn-info" ng-click="setEditedTweet(tweet)"><i class="fa fa-pencil"></i></button>
-						<button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+						<button class="btn btn-info" ng-click="setEditedTweet(tweet);"><i class="fa fa-pencil"></i></button>
+						<button class="btn btn-danger"><i class="fa fa-trash" ng-click="deleteTweet(tweet.tweetId);"></i></button>
 					</td>
 				</tr>
 			</table>
