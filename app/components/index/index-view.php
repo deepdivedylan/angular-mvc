@@ -1,17 +1,25 @@
 <main class="container">
-	<div class="row">
-		<div class="col-md-4">
-			<section ng-repeat="tweet in tweets">
-				<p>
-					{{ tweet.tweetContent }}<br />
-					<em>{{ tweet.tweetDate | date: "medium" }}</em>
-				</p>
-			</section>
-		</div>
+	<section class="row">
 		<div class="col-md-8">
+			<table class="table table-bordered table-condensed table-hover table-responsive table-striped">
+				<tr>
+					<th>Tweet Id</th><th>Profile Id</th><th>Tweet Content</th><th>Tweet Date</th><th>Actions</th>
+				</tr>
+				<tr ng-repeat="tweet in tweets">
+					<td>{{ tweet.tweetId }}</td>
+					<td>{{ tweet.profileId }}</td>
+					<td>{{ tweet.tweetContent }}</td>
+					<td>{{ tweet.tweetDate | date: "medium" }}</td>
+					<td><button class="btn btn-info"><i class="fa fa-pencil"></i></button>&nbsp;<button class="btn btn-danger"><i class="fa fa-trash"></i></button></td>
+				</tr>
+			</table>
+		</div>
+		<div class="col-md-4">
 			<form id="tweetForm" class="form-horizontal well" ng-submit="createTweet(newTweet);">
+				<h2>Create Tweet</h2>
+				<hr />
 				<section class="form-group">
-					<label for="profileId">Profile ID</label>
+					<label for="profileId">Profile Id</label>
 					<input type="number" name="profileId" id="profileId" class="form-control" min="1" step="1" ng-model="newTweet.profileId" />
 				</section>
 				<section class="form-group">
@@ -37,5 +45,5 @@
 				<button type="submit" class="btn btn-info btn-lg">Create</button>
 			</form>
 		</div>
-	</div>
+	</section>
 </main>
