@@ -77,7 +77,10 @@
 				<button type="submit" class="btn btn-info btn-lg">Save</button>
 				<button class="btn btn-warning btn-lg" ng-click="cancelEditing();">Cancel</button>
 			</form>
-			<section id="outputArea"></section>
+			<section id="tweetStatusBar" class="alert alert-dismissible" ng-class="statusType" ng-show="showStatus" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="disableStatus();"><span aria-hidden="true">&times;</span></button>
+				{{ statusContent }}
+			</section>
 		</div>
 	</section>
 </main>
