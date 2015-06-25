@@ -21,7 +21,7 @@ app.service("TweetModel", function($http, TWEET_ENDPOINT) {
 	};
 
 	this.update = function(tweetId, tweet) {
-		return($http.post(getUrl(), tweet));
+		return($http.post(getUrlForId(tweetId), tweet));
 	};
 
 	this.destroy = function(tweetId) {
