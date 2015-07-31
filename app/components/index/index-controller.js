@@ -1,4 +1,4 @@
-app.controller("IndexController", ["$scope", "$filter", "TweetModel", function($scope, $filter, tweetModel) {
+app.controller("IndexController", ["$scope", "$filter", "$modal", "TweetModel", function($scope, $filter, $modal, tweetModel) {
 	$scope.editedTweet = null;
 	$scope.newTweet = null;
 	$scope.isEditing = false;
@@ -44,13 +44,24 @@ app.controller("IndexController", ["$scope", "$filter", "TweetModel", function($
 	};
 
 	$scope.deleteTweet = function(tweetId) {
-		tweetModel.destroy(tweetId)
-			.then(function(result) {
-				$scope.displayStatus(result.data);
-				$scope.cancelEditing();
-				$scope.getTweets();
-			});
-	};
+    var message = "Do you really want to delete this student and all of his or her files?";
+
+    var modalHtml = '<div class="modal-body">' + message + '</div><div class="modal-footer"><button class="btn btn-primary" ng-click="yes()">Yes</button><button class="btn btn-warning" ng-click="no()">No</button></div>';
+
+    var modalInstance = $modal.open({
+      template: modalHtml,
+      controller: ModalInstanceCtrl
+    });
+
+    modalInstance.result.then(function() {
+			tweetModel.destroy(tweetId)
+				.then(function(result) {
+					$scope.displayStatus(result.data);
+					$scope.cancelEditing();
+					$scope.getTweets();
+				});
+    });
+  };
 
 	$scope.initCreateForm = function() {
 		$scope.newTweet = {profileId: "", tweetContent: "", tweetDate: new Date()};
@@ -69,3 +80,14 @@ app.controller("IndexController", ["$scope", "$filter", "TweetModel", function($
 	$scope.getTweets();
 	$scope.initCreateForm();
 }]);
+
+
+var ModalInstanceCtrl = function($scope, $modalInstance) {
+  $scope.yes = function() {
+    $modalInstance.close();
+  };
+
+  $scope.no = function() {
+    $modalInstance.dismiss('cancel');
+  };
+};
