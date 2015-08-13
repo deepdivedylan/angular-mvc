@@ -2,5 +2,5 @@
 RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^[a-zA-Z_-]*/?(\d+)?$ /~dmcdonald21/angular-mvc/api/tweet/?id=$1
+RewriteRule ^/?(\d+)?$ /~dmcdonald21/angular-mvc/api/tweet/?id=$1
 </IfModule>
