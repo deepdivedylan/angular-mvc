@@ -27,6 +27,9 @@ $PREFIX = str_repeat("../", $DEPTH_DIFFERENCE);
 		<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.10.0.js"></script>
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
 		<script type="text/javascript" src="<?php echo $PREFIX; ?>assets/js/datetimepicker.js"></script>
+		<script type="text/javascript" src="<?php echo $PREFIX; ?>app/angular-mvc.js"></script>
+		<script type="text/javascript" src="<?php echo $PREFIX; ?>app/components/tweet/tweet-service.js"></script>
+		<script type="text/javascript" src="<?php echo $PREFIX; ?>app/components/index/index-controller.js"></script>
 		<title><?php echo $PAGE_TITLE; ?></title>
 	</head>
 	<body>
