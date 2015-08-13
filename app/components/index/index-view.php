@@ -12,7 +12,9 @@
 					<td>{{ tweet.tweetDate | date: "medium" }}</td>
 					<td>
 						<button class="btn btn-info" ng-click="setEditedTweet(tweet);"><i class="fa fa-pencil"></i></button>
-						<button class="btn btn-danger"><i class="fa fa-trash" ng-click="deleteTweet(tweet.tweetId);"></i></button>
+						<form ng-submit="deleteTweet(tweet.tweetId);">
+							<button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+						</form>
 					</td>
 				</tr>
 			</table>
