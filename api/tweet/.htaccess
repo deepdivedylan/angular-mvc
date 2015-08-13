@@ -2,5 +2,5 @@
 RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^([a-zA-Z_-]*)/(html|json|xml)/?(\d+)?$ /~dmcdonald21/angular-mvc/api/index.php?class=$1&format=$2&id=$3
+RewriteRule ^[a-zA-Z_-]*/?(\d+)?$ /~dmcdonald21/angular-mvc/api/tweet/?id=$1
 </IfModule>

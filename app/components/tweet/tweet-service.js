@@ -1,4 +1,4 @@
-app.constant("TWEET_ENDPOINT", "api/tweet/json/");
+app.constant("TWEET_ENDPOINT", "api/tweet/");
 app.service("TweetModel", function($http, TWEET_ENDPOINT) {
 	function getUrl() {
 		return(TWEET_ENDPOINT);
@@ -21,7 +21,7 @@ app.service("TweetModel", function($http, TWEET_ENDPOINT) {
 	};
 
 	this.update = function(tweetId, tweet) {
-		return($http.post(getUrlForId(tweetId), tweet));
+		return($http.put(getUrlForId(tweetId), tweet));
 	};
 
 	this.destroy = function(tweetId) {
