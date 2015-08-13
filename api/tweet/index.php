@@ -28,6 +28,8 @@ try {
 	// handle all RESTful calls to Tweet
 	// get some or all Tweets
 	if($method === "GET") {
+		// set an XSRF cookie on GET requests
+		setXsrfCookie("/");
 		if(empty($id) === false) {
 			$reply->data = Tweet::getTweetByTweetId($pdo, $id);
 		} else {
