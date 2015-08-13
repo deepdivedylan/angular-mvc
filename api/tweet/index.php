@@ -1,5 +1,6 @@
 <?php
 require_once(dirname(dirname(__DIR__)) . "/classes/autoload.php");
+require_once(dirname(dirname(__DIR__)) . "/lib/xsrf.php");
 require_once("/etc/apache2/data-design/encrypted-config.php");
 
 // start the session and create a XSRF token
@@ -7,35 +8,10 @@ if(session_status() !== PHP_SESSION_ACTIVE) {
 	session_start();
 }
 
-// if the token does not exist, create one and send it in a cookie
-if(empty($_SESSION["XSRF-TOKEN"]) === true) {
-	$_SESSION["XSRF-TOKEN"] = hash("sha512", session_id() . openssl_random_pseudo_bytes(16));
-}
-setcookie("XSRF-TOKEN", $_SESSION["XSRF-TOKEN"], 0, dirname(dirname($_SERVER["SCRIPT_NAME"])));
-
 // prepare an empty reply
 $reply = new stdClass();
 $reply->status = 200;
 $reply->data = null;
-
-/**
- * verifies the X-XSRF-TOKEN sent by Angular matches the XSRF-TOKEN saved in this session.
- * This function returns nothing, but will throw an exception when something does not match
- *
- * @see https://code.angularjs.org/1.4.3/docs/api/ng/service/$http Angular $http service
- * @throws InvalidArgumentException when tokens do not match
- **/
-function verifyXsrf() {
-	$headers = apache_request_headers();
-	if(array_key_exists("X-XSRF-TOKEN", $headers) === false) {
-		throw(new InvalidArgumentException("invalid XSRF token", 401));
-	}
-	$angularHeader = $headers["X-XSRF-TOKEN"];
-	$correctHeader = $_SESSION["XSRF-TOKEN"];
-	if($angularHeader !== $correctHeader) {
-		throw(new InvalidArgumentException("invalid XSRF token", 401));
-	}
-}
 
 try {
 	// determine which HTTP method was used
