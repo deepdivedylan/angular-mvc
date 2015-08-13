@@ -1,7 +1,7 @@
 <main class="container">
 	<section class="row">
 		<div class="col-md-8">
-			<table class="table table-bordered table-condensed table-hover table-responsive table-striped">
+			<table id="tweetTable" class="table table-bordered table-hover table-responsive table-striped">
 				<tr>
 					<th>Tweet Id</th><th>Profile Id</th><th>Tweet Content</th><th>Tweet Date</th><th>Actions</th>
 				</tr>
