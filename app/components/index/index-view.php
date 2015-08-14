@@ -23,20 +23,20 @@
 			<form id="addTweetForm" class="form-horizontal well" ng-submit="createTweet(newTweet);" ng-hide="isEditing">
 				<h2>Create Tweet</h2>
 				<hr />
-				<section class="form-group">
+				<section class="form-group" ng-class="{ 'has-error': addTweetForm.addProfileId.$touched && addTweetForm.addProfileId.$invalid }">
 					<label for="addProfileId">Profile Id</label>
-					<input type="number" name="addProfileId" id="addProfileId" class="form-control" min="1" step="1" ng-model="newTweet.profileId" />
+					<input type="number" name="addProfileId" id="addProfileId" class="form-control" min="1" step="1" ng-model="newTweet.profileId" required />
 				</section>
-				<section class="form-group">
+				<section class="form-group" ng-class="{ 'has-error': addTweetForm.addTweetContent.$touched && addTweetForm.addTweetContent.$invalid }">
 					<label for="addTweetContent">Tweet Content</label>
-					<input type="text" name="addTweetContent" id="addTweetContent" class="form-control" maxlength="140" ng-model="newTweet.tweetContent"/>
+					<input type="text" name="addTweetContent" id="addTweetContent" class="form-control" maxlength="140" ng-model="newTweet.tweetContent" ng-maxlength="140" />
 				</section>
-				<section class="form-group">
+				<section class="form-group" ng-class="{ 'has-error': addTweetForm.addTweetDate.$touched && addTweetForm.addTweetDate.$invalid }">
 					<label for="addTweetDate">Tweet Date</label>
 					<div class="dropdown">
 						<a class="dropdown-toggle" id="addTweetDateDropdown" role="button" data-toggle="dropdown" data-target="#">
 							<div class="input-group">
-								<input type="text" id="addTweetDate" name="addTweetDate" class="form-control" ng-model="newTweet.tweetDate">
+								<input type="text" id="addTweetDate" name="addTweetDate" class="form-control" ng-model="newTweet.tweetDate" />
 								<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
 							</div>
 						</a>
