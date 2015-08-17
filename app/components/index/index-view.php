@@ -20,7 +20,7 @@
 			</table>
 		</div>
 		<div class="col-md-4">
-			<form id="addTweetForm" class="form-horizontal well" ng-submit="createTweet(newTweet);" ng-hide="isEditing">
+			<form name="addTweetForm" id="addTweetForm" class="form-horizontal well" ng-submit="createTweet(newTweet);" ng-hide="isEditing" novalidate>
 				<h2>Create Tweet</h2>
 				<hr />
 				<section class="form-group" ng-class="{ 'has-error': addTweetForm.addProfileId.$touched && addTweetForm.addProfileId.$invalid }">
