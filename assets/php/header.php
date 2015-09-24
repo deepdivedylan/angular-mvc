@@ -35,6 +35,7 @@ $ANGULAR_VERSION = "1.4.6";
 		<script type="text/javascript" src="<?php echo $PREFIX; ?>assets/js/datetimepicker.js"></script>
 		<script type="text/javascript" src="<?php echo $PREFIX; ?>app/angular-mvc.js"></script>
 		<script type="text/javascript" src="<?php echo $PREFIX; ?>app/components/tweet/tweet-service.js"></script>
+		<script type="text/javascript" src="<?php echo $PREFIX; ?>app/components/tweet/tweet-controller.js"></script>
 		<script type="text/javascript" src="<?php echo $PREFIX; ?>app/components/index/index-controller.js"></script>
 		<title><?php echo $PAGE_TITLE; ?></title>
 	</head>
