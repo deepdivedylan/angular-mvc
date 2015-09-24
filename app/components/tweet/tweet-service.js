@@ -1,5 +1,5 @@
 app.constant("TWEET_ENDPOINT", "api/tweet/");
-app.service("TweetModel", function($http, TWEET_ENDPOINT) {
+app.service("TweetService", function($http, TWEET_ENDPOINT) {
 	function getUrl() {
 		return(TWEET_ENDPOINT);
 	}

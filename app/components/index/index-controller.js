@@ -1,4 +1,4 @@
-app.controller("IndexController", ["$scope", "$filter", "$modal", "TweetModel", function($scope, $filter, $modal, tweetModel) {
+app.controller("IndexController", ["$scope", "$filter", "$modal", "$window", "TweetService", function($scope, $filter, $modal, $window, TweetService) {
 	$scope.editedTweet = null;
 	$scope.newTweet = null;
 	$scope.isEditing = false;
@@ -8,7 +8,7 @@ app.controller("IndexController", ["$scope", "$filter", "$modal", "TweetModel", 
 	$scope.tweets = [];
 
 	$scope.getTweets = function() {
-		tweetModel.all()
+		TweetService.all()
 			.then(function(result) {
 				$scope.tweets = result.data.data;
 			});
@@ -17,7 +17,7 @@ app.controller("IndexController", ["$scope", "$filter", "$modal", "TweetModel", 
 	$scope.createTweet = function(tweet, validated) {
 		if(validated === true) {
 			tweet.tweetDate = $filter("date")(tweet.tweetDate, "yyyy-MM-dd HH:mm:ss");
-			tweetModel.create(tweet)
+			TweetService.create(tweet)
 				.then(function(result) {
 					$scope.displayStatus(result.data);
 				});
@@ -27,7 +27,7 @@ app.controller("IndexController", ["$scope", "$filter", "$modal", "TweetModel", 
 	$scope.updateTweet = function(tweet, validated) {
 		if(validated === true) {
 			tweet.tweetDate = $filter("date")(tweet.tweetDate, "yyyy-MM-dd HH:mm:ss");
-			tweetModel.update(tweet.tweetId, tweet)
+			TweetService.update(tweet.tweetId, tweet)
 				.then(function(result) {
 					$scope.displayStatus(result.data);
 					$scope.cancelEditing();
@@ -37,6 +37,7 @@ app.controller("IndexController", ["$scope", "$filter", "$modal", "TweetModel", 
 	};
 
 	$scope.setEditedTweet = function(tweet) {
+		$window.scrollTo(0, 0);
 		$scope.editedTweet = angular.copy(tweet);
 		$scope.editedTweet.tweetDate = new Date($scope.editedTweet.tweetDate);
 		$scope.isEditing = true;
@@ -58,7 +59,7 @@ app.controller("IndexController", ["$scope", "$filter", "$modal", "TweetModel", 
     });
 
     modalInstance.result.then(function() {
-			tweetModel.destroy(tweetId)
+			TweetService.destroy(tweetId)
 				.then(function(result) {
 					$scope.displayStatus(result.data);
 					$scope.cancelEditing();
