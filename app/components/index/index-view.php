@@ -1,24 +1,5 @@
 <main class="container">
 	<section class="row">
-		<div class="col-md-8">
-			<table id="tweetTable" class="table table-bordered table-hover table-responsive table-striped">
-				<tr>
-					<th>Tweet Id</th><th>Profile Id</th><th>Tweet Content</th><th>Tweet Date</th><th>Actions</th>
-				</tr>
-				<tr ng-repeat="tweet in tweets">
-					<td>{{ tweet.tweetId }}</td>
-					<td>{{ tweet.profileId }}</td>
-					<td>{{ tweet.tweetContent }}</td>
-					<td>{{ tweet.tweetDate | date: "medium" }}</td>
-					<td>
-						<button class="btn btn-info" ng-click="setEditedTweet(tweet);"><i class="fa fa-pencil"></i></button>
-						<form ng-submit="deleteTweet(tweet.tweetId);">
-							<button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i></button>
-						</form>
-					</td>
-				</tr>
-			</table>
-		</div>
 		<div class="col-md-4">
 			<form name="addTweetForm" id="addTweetForm" class="form-horizontal well" ng-submit="createTweet(newTweet, addTweetForm.$valid);" ng-hide="isEditing" novalidate>
 				<h2>Create Tweet</h2>
@@ -101,6 +82,25 @@
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="disableStatus();"><span aria-hidden="true">&times;</span></button>
 				{{ statusContent }}
 			</p>
+		</div>
+		<div class="col-md-8">
+			<table id="tweetTable" class="table table-bordered table-hover table-responsive table-striped">
+				<tr>
+					<th>Tweet Id</th><th>Profile Id</th><th>Tweet Content</th><th>Tweet Date</th><th>Actions</th>
+				</tr>
+				<tr ng-repeat="tweet in tweets">
+					<td>{{ tweet.tweetId }}</td>
+					<td>{{ tweet.profileId }}</td>
+					<td>{{ tweet.tweetContent }}</td>
+					<td>{{ tweet.tweetDate | date: "medium" }}</td>
+					<td>
+						<button class="btn btn-info" ng-click="setEditedTweet(tweet);"><i class="fa fa-pencil"></i></button>
+						<form ng-submit="deleteTweet(tweet.tweetId);">
+							<button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+						</form>
+					</td>
+				</tr>
+			</table>
 		</div>
 	</section>
 </main>
