@@ -46,7 +46,7 @@ app.controller("IndexController", ["$scope", "$filter", "$modal", "TweetModel", 
 	};
 
 	$scope.deleteTweet = function(tweetId) {
-    var message = "Do you really want to delete this student and all of his or her files?";
+    var message = "Do you really want to delete this tweet?";
 
     var modalHtml = '<div class="modal-body">' + message + '</div><div class="modal-footer"><button class="btn btn-primary" ng-click="yes()">Yes</button><button class="btn btn-warning" ng-click="no()">No</button></div>';
 
