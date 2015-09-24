@@ -24,14 +24,16 @@ app.controller("IndexController", ["$scope", "$filter", "$modal", "TweetModel", 
 		}
 	};
 
-	$scope.updateTweet = function(tweet) {
-		tweet.tweetDate = $filter("date")(tweet.tweetDate, "yyyy-MM-dd HH:mm:ss");
-		tweetModel.update(tweet.tweetId, tweet)
-			.then(function (result) {
-				$scope.displayStatus(result.data);
-				$scope.cancelEditing();
-				$scope.getTweets();
-			});
+	$scope.updateTweet = function(tweet, validated) {
+		if(validated === true) {
+			tweet.tweetDate = $filter("date")(tweet.tweetDate, "yyyy-MM-dd HH:mm:ss");
+			tweetModel.update(tweet.tweetId, tweet)
+				.then(function(result) {
+					$scope.displayStatus(result.data);
+					$scope.cancelEditing();
+					$scope.getTweets();
+				});
+		}
 	};
 
 	$scope.setEditedTweet = function(tweet) {

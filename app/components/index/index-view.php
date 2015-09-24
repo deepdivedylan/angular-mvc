@@ -33,7 +33,7 @@
 				</div>
 				<div class="form-group" ng-class="{ 'has-error': addTweetForm.addTweetContent.$touched && addTweetForm.addTweetContent.$invalid }">
 					<label for="addTweetContent">Tweet Content</label>
-					<input type="text" name="addTweetContent" id="addTweetContent" class="form-control" maxlength="140" ng-model="newTweet.tweetContent" ng-minlength="1" ng-maxlength="140" ng-required="true "/>
+					<input type="text" name="addTweetContent" id="addTweetContent" class="form-control" maxlength="140" ng-model="newTweet.tweetContent" ng-minlength="1" ng-maxlength="140" ng-required="true" />
 					<div class="alert alert-danger" role="alert" ng-messages="addTweetForm.addTweetContent.$error" ng-if="addTweetForm.addTweetContent.$touched" ng-hide="addTweetForm.addTweetContent.$valid">
 						<p ng-message="required">Tweet content is required.</p>
 						<p ng-message="minlength">Tweet content cannot be empty.</p>
@@ -58,18 +58,27 @@
 				</div>
 				<button type="submit" class="btn btn-info btn-lg" ng-disabled="addTweetForm.$invalid"><i class="fa fa-twitter"></i> Create</button>
 			</form>
-			<form id="editTweetForm" class="form-horizontal well" ng-submit="updateTweet(editedTweet);" ng-show="isEditing">
+			<form name="editTweetForm" id="editTweetForm" class="form-horizontal well" ng-submit="updateTweet(editedTweet, editTweetForm.$valid);" ng-show="isEditing" novalidate>
 				<h2>Edit Tweet</h2>
 				<hr />
-				<section class="form-group">
+				<div class="form-group" ng-class="{ 'has-error': editTweetForm.editProfileId.$touched && editTweetForm.editProfileId.$invalid }">
 					<label for="editProfileId">Profile Id</label>
-					<input type="number" name="editProfileId" id="editProfileId" class="form-control" min="1" step="1" ng-model="editedTweet.profileId" />
-				</section>
-				<section class="form-group">
+					<input type="number" name="editProfileId" id="editProfileId" class="form-control" min="1" step="1" ng-model="editedTweet.profileId" ng-pattern="/^\d+$/" ng-required="true" />
+					<div class="alert alert-danger" role="alert" ng-messages="editTweetForm.editProfileId.$error" ng-if="editTweetForm.editProfileId.$touched" ng-hide="editTweetForm.editProfileId.$valid">
+						<p ng-message="required">Profile id is required.</p>
+						<p ng-message="pattern">Profile id must be a positive integer.</p>
+					</div>
+				</div>
+				<div class="form-group" ng-class="{ 'has-error': editTweetForm.editTweetContent.$touched && editTweetForm.editTweetContent.$invalid }">
 					<label for="editTweetContent">Tweet Content</label>
-					<input type="text" name="editTweetContent" id="editTweetContent" class="form-control" maxlength="140" ng-model="editedTweet.tweetContent"/>
-				</section>
-				<section class="form-group">
+					<input type="text" name="editTweetContent" id="editTweetContent" class="form-control" maxlength="140" ng-model="editedTweet.tweetContent" ng-minlength="1" ng-maxlength="140" ng-required="true" />
+					<div class="alert alert-danger" role="alert" ng-messages="editTweetForm.editTweetContent.$error" ng-if="editTweetForm.editTweetContent.$touched" ng-hide="editTweetForm.editTweetContent.$valid">
+						<p ng-message="required">Tweet content is required.</p>
+						<p ng-message="minlength">Tweet content cannot be empty.</p>
+						<p ng-message="maxlength">Tweet content is too long.</p>
+					</div>
+				</div>
+				<div class="form-group" ng-class="{ 'has-error': editTweetForm.editTweetDate.$touched && editTweetForm.editTweetDate.$invalid }">
 					<label for="editTweetDate">Tweet Date</label>
 					<div class="dropdown">
 						<a class="dropdown-toggle" id="editTweetDateDropdown" role="button" data-toggle="dropdown" data-target="#">
@@ -84,9 +93,9 @@
 							</datetimepicker>
 						</ul>
 					</div>
-				</section>
-				<button type="submit" class="btn btn-info btn-lg">Save</button>
-				<button class="btn btn-warning btn-lg" ng-click="cancelEditing();">Cancel</button>
+				</div>
+				<button type="submit" class="btn btn-info btn-lg" ng-disabled="editTweetForm.$invalid"><i class="fa fa-twitter"></i> Save</button>
+				<button class="btn btn-warning btn-lg" ng-click="cancelEditing();"><i class="fa fa-times"></i> Cancel</button>
 			</form>
 			<p id="tweetStatusBar" class="alert alert-dismissible" ng-class="statusType" ng-show="showStatus" role="alert">
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="disableStatus();"><span aria-hidden="true">&times;</span></button>
