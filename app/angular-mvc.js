@@ -1,4 +1,4 @@
-var app = angular.module("AngularMVC", ["ngMessages","ngRoute", "ngSanitize", "ui.bootstrap"]);
+var app = angular.module("AngularMVC", ["ngMessages","ngRoute", "ngSanitize", "ui.bootstrap", "ui.bootstrap.datetimepicker"]);
 
 app.config(function($routeProvider) {
 	$routeProvider

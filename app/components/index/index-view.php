@@ -30,9 +30,8 @@
 								<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
 							</div>
 						</a>
-						<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-							<datetimepicker ng-model="newTweet.tweetDate"
-											data-datetimepicker-config="{ dropdownSelector: '#addTweetDateDropdown', minuteStep: 1 }">
+						<ul class="dropdown-menu" role="menu" aria-labelledby="addTweetDateDropdown">
+							<datetimepicker data-ng-model="newTweet.tweetDate" data-datetimepicker-config="{ dropdownSelector: '#addTweetDateDropdown', minuteStep: 1 }">
 							</datetimepicker>
 						</ul>
 					</div>
@@ -68,7 +67,7 @@
 								<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
 							</div>
 						</a>
-						<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+						<ul class="dropdown-menu" role="menu" aria-labelledby="editTweetDateDropdown">
 							<datetimepicker ng-model="editedTweet.tweetDate"
 											data-datetimepicker-config="{ dropdownSelector: '#editTweetDateDropdown', minuteStep: 1 }">
 							</datetimepicker>
