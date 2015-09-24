@@ -20,18 +20,27 @@
 			</table>
 		</div>
 		<div class="col-md-4">
-			<form name="addTweetForm" id="addTweetForm" class="form-horizontal well" ng-submit="createTweet(newTweet);" ng-hide="isEditing" novalidate>
+			<form name="addTweetForm" id="addTweetForm" class="form-horizontal well" ng-submit="createTweet(newTweet, addTweetForm.$valid);" ng-hide="isEditing" novalidate>
 				<h2>Create Tweet</h2>
 				<hr />
-				<section class="form-group" ng-class="{ 'has-error': addTweetForm.addProfileId.$touched && addTweetForm.addProfileId.$invalid }">
+				<div class="form-group" ng-class="{ 'has-error': addTweetForm.addProfileId.$touched && addTweetForm.addProfileId.$invalid }">
 					<label for="addProfileId">Profile Id</label>
-					<input type="number" name="addProfileId" id="addProfileId" class="form-control" min="1" step="1" ng-model="newTweet.profileId" required />
-				</section>
-				<section class="form-group" ng-class="{ 'has-error': addTweetForm.addTweetContent.$touched && addTweetForm.addTweetContent.$invalid }">
+					<input type="number" name="addProfileId" id="addProfileId" class="form-control" min="1" step="1" ng-model="newTweet.profileId" ng-pattern="/^\d+$/" ng-required="true" />
+					<div class="alert alert-danger" role="alert" ng-messages="addTweetForm.addProfileId.$error" ng-if="addTweetForm.addProfileId.$touched" ng-hide="addTweetForm.addProfileId.$valid">
+						<p ng-message="required">Profile id is required.</p>
+						<p ng-message="pattern">Profile id must be a positive integer.</p>
+					</div>
+				</div>
+				<div class="form-group" ng-class="{ 'has-error': addTweetForm.addTweetContent.$touched && addTweetForm.addTweetContent.$invalid }">
 					<label for="addTweetContent">Tweet Content</label>
-					<input type="text" name="addTweetContent" id="addTweetContent" class="form-control" maxlength="140" ng-model="newTweet.tweetContent" ng-maxlength="140" />
-				</section>
-				<section class="form-group" ng-class="{ 'has-error': addTweetForm.addTweetDate.$touched && addTweetForm.addTweetDate.$invalid }">
+					<input type="text" name="addTweetContent" id="addTweetContent" class="form-control" maxlength="140" ng-model="newTweet.tweetContent" ng-minlength="1" ng-maxlength="140" ng-required="true "/>
+					<div class="alert alert-danger" role="alert" ng-messages="addTweetForm.addTweetContent.$error" ng-if="addTweetForm.addTweetContent.$touched" ng-hide="addTweetForm.addTweetContent.$valid">
+						<p ng-message="required">Tweet content is required.</p>
+						<p ng-message="minlength">Tweet content cannot be empty.</p>
+						<p ng-message="maxlength">Tweet content is too long.</p>
+					</div>
+				</div>
+				<div class="form-group" ng-class="{ 'has-error': addTweetForm.addTweetDate.$touched && addTweetForm.addTweetDate.$invalid }">
 					<label for="addTweetDate">Tweet Date</label>
 					<div class="dropdown">
 						<a class="dropdown-toggle" id="addTweetDateDropdown" role="button" data-toggle="dropdown" data-target="#">
@@ -46,8 +55,8 @@
 							</datetimepicker>
 						</ul>
 					</div>
-				</section>
-				<button type="submit" class="btn btn-info btn-lg">Create</button>
+				</div>
+				<button type="submit" class="btn btn-info btn-lg" ng-disabled="addTweetForm.$invalid"><i class="fa fa-twitter"></i> Create</button>
 			</form>
 			<form id="editTweetForm" class="form-horizontal well" ng-submit="updateTweet(editedTweet);" ng-show="isEditing">
 				<h2>Edit Tweet</h2>
@@ -79,10 +88,10 @@
 				<button type="submit" class="btn btn-info btn-lg">Save</button>
 				<button class="btn btn-warning btn-lg" ng-click="cancelEditing();">Cancel</button>
 			</form>
-			<section id="tweetStatusBar" class="alert alert-dismissible" ng-class="statusType" ng-show="showStatus" role="alert">
+			<p id="tweetStatusBar" class="alert alert-dismissible" ng-class="statusType" ng-show="showStatus" role="alert">
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="disableStatus();"><span aria-hidden="true">&times;</span></button>
 				{{ statusContent }}
-			</section>
+			</p>
 		</div>
 	</section>
 </main>

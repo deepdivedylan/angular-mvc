@@ -14,12 +14,14 @@ app.controller("IndexController", ["$scope", "$filter", "$modal", "TweetModel", 
 			});
 	};
 
-	$scope.createTweet = function(tweet) {
-		tweet.tweetDate = $filter("date")(tweet.tweetDate, "yyyy-MM-dd HH:mm:ss");
-		tweetModel.create(tweet)
-			.then(function(result) {
-				$scope.displayStatus(result.data);
-			});
+	$scope.createTweet = function(tweet, validated) {
+		if(validated === true) {
+			tweet.tweetDate = $filter("date")(tweet.tweetDate, "yyyy-MM-dd HH:mm:ss");
+			tweetModel.create(tweet)
+				.then(function(result) {
+					$scope.displayStatus(result.data);
+				});
+		}
 	};
 
 	$scope.updateTweet = function(tweet) {

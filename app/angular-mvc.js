@@ -1,4 +1,4 @@
-var app = angular.module("AngularMVC", ["ngRoute", "ngSanitize", "ui.bootstrap"]);
+var app = angular.module("AngularMVC", ["ngMessages","ngRoute", "ngSanitize", "ui.bootstrap"]);
 
 app.config(function($routeProvider) {
 	$routeProvider
